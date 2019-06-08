@@ -1,0 +1,145 @@
+{% extends "basic/base.html" %}
+{% block username %}{{ current_user }}{% endblock %}
+{% block title %}Admin Page{% endblock %}
+{% block content %}
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-lg-10">
+            <h2>Whole table for users</h2>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="{{ url_for('main.userpage') }}">Homepage</a>
+                </li>
+
+                <li class="breadcrumb-item active">
+                    <strong>Whole table for users</strong>
+                </li>
+            </ol>
+        </div>
+        <div class="col-lg-2">
+
+        </div>
+    </div>
+
+    <div class="wrapper wrapper-content animated fadeInRight ecommerce">
+
+        <form action="{{ url_for('main.manageUser') }}" method="GET">
+            <div class="ibox-content m-b-sm border-bottom">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-form-label" for="product_name">True name</label>
+                            <input type="text" name="true_name" value="" placeholder="user name" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-form-label" for="price">student id</label>
+                            <input type="text" name="student_id" value="" placeholder="student id" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-form-label" for="status">Uploaded item name</label>
+                            <input type="text" name="upload_item" value="" placeholder="Computer" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <p>
+                            <button type="submit" name="submit" class="btn btn-w-m btn-primary">Search</button>
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+
+        </form>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox">
+                    <div class="ibox-content">
+                        <table class="footable table table-stripped toggle-arrow-tiny footable-loaded default breakpoint"
+                               data-page-size="15">
+                            <thead>
+                            <tr>
+                                <th data-toggle="true" class="footable-visible footable-sortable footable-first-column">
+                                    User names<span class="footable-sort-indicator"></span></th>
+                                <th data-hide="phone" class="footable-visible footable-sortable">True name<span
+                                        class="footable-sort-indicator"></span></th>
+                                <th data-hide="phone" class="footable-visible footable-sortable">Student ID<span
+                                        class="footable-sort-indicator"></span></th>
+                                <th data-hide="phone" class="footable-visible footable-sortable">Email<span
+                                        class="footable-sort-indicator"></span></th>
+                                <th data-hide="phone" class="footable-visible footable-sortable">Phone number<span
+                                        class="footable-sort-indicator"></span></th>
+                                <th data-hide="phone" class="footable-visible footable-sortable">Position<span
+                                        class="footable-sort-indicator"></span></th>
+                                <th data-hide="phone" class="footable-visible footable-sortable">Last login<span
+                                        class="footable-sort-indicator"></span></th>
+                                <th class="text-right footable-visible footable-last-column" data-sort-ignore="true">
+                                    Operation
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for user in users %}
+                                <tr class="footable-even" style="">
+                                    <td class="footable-visible footable-first-column"><span
+                                            class="footable-toggle"></span>
+                                        {{ user.username }}
+                                    </td>
+                                    <td class="footable-visible">
+                                        {{ user.true_name }}
+                                    </td>
+                                    <td class="footable-visible">
+                                        {{ user.student_id }}
+                                    </td>
+                                    <td class="footable-visible">
+                                        {{ user.email }}
+                                    </td>
+                                    <td class="footable-visible" style="">
+                                        {{ user.phone_number }}
+                                    </td>
+                                    <td class="footable-visible">
+                                        {{ user.group.group_name }}
+                                    </td>
+                                    <td class="footable-visible">
+                                        {{ user.last_login }}
+                                    </td>
+                                    <td class="text-right footable-visible footable-last-column">
+                                        <div class="btn-group">
+                                            <button class="btn-white btn btn-xs"
+                                                    onclick="location.href='{{ url_for('main.manageItemByUploader', uploader_id=user.id) }}'">
+                                                check upload
+                                            </button>
+                                            {% if user.group_id != 1 %}
+                                                <button class="btn-white btn btn-xs"
+                                                        onclick="location.href='{{ url_for('user.admin_modify_profile', user_id=user.id) }}'">
+                                                    modify
+                                                </button>
+                                                <button class="btn-white btn btn-xs"
+                                                        onclick="location.href='{{ url_for('user.modify_status', user_id=user.id) }}'">
+                                                    change position
+                                                </button>
+                                            {% endif %}
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <td colspan="6" class="footable-visible"
+                                    style="padding-top: 20px; padding-down: -20px;">
+                                    {% import 'basic/pagination.html' as pg %}
+                                    {{ pg.my_paginate(pagination,'main.manageUser') }}
+                                </td>
+                            </tr>
+                            </tfoot>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

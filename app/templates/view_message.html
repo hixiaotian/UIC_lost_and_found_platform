@@ -1,0 +1,92 @@
+{% extends "basic/base.html" %}
+{% block username %}{{ current_user.username }}{% endblock %}
+{% block title %}message{% endblock %}
+{% block content %}
+    <hr>
+    <div class="row wrapper border-bottom white-bg page-heading">
+
+        <div class="col-lg-12">
+            {% if current_user.group_id == 1 %}
+            <h2>All message in {{ storage.location_name }}</h2>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url_for('main.userpage') }}">{{ current_user }}</a></li>
+                <li class="breadcrumb-item active"><strong>All message on this location</strong></li>
+            </ol>
+            {% elif current_user.group_id != 1 %}
+            <h2>All Message</h2>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url_for('main.userpage') }}">{{ current_user }}</a></li>
+                <li class="breadcrumb-item active"><strong>All message</strong></li>
+            </ol>
+            {% endif %}
+        </div>
+        <div class="col-lg-12"></div>
+    </div>
+
+    <div id="container" class="gray-bg" style="width:100%">
+        <div class="wrapper wrapper-content animated fadeInRight container">
+            <div class="row">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="col-lg-6">
+                            <div class="ibox ">
+                                <div class="ibox-title">
+                                    {% if current_user.group_id == 1 %}
+                                    <h5>From: {{ message.sender.true_name }}</h5>
+                                    {% else %}
+                                    <h5>From: {{ message.store_location.location_name }}</h5>
+                                    {% endif %}
+                                    <div class="ibox-tools">
+                                        <a class="collapse-link">
+                                            <i class="fa fa-chevron-up"></i>
+                                        </a>
+                                        <a class="close-link">
+                                            <i class="fa fa-times"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="ibox-content">
+                                    <div style="overflow: auto;">
+                                        <div style="float:left">
+                                            <p>
+                                                <b>{{ message.content }}</b>
+                                            </p>
+                                            <p>
+                                                {{ message.content }}
+                                            </p>
+                                        </div>
+                                        {% if current_user.group_id == 1 %}
+                                        <img src="{{ url_for('static', filename=message.sender.icon) }}" style="height: 70px; width:70px; float:right" class="img-circle">
+                                        {% else %}
+                                        <img src="{{ url_for('static', filename=message.store_location.pic) }}"
+                                             style="height: 70px; width:70px; float:right" class="img-circle">
+                                        {% endif %}
+                                    </div>
+                                    <hr>
+                                    <div style="margin-top:-10px; padding-top:10px; overflow: auto;">
+                                        <p style="float:left">
+                                            Upload time: {{ message.timestamp }}
+                                        </p>
+                                        {% if current_user.group_id == 1 %}
+                                        <button class="btn btn-primary" onclick="location.href='{{ url_for('main.reply', storage_id=storage.id, reply_id=message.sender.id) }}'" style="float:right">Reply</button>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    <div style="margin-top: 30px; margin-left: 22vw; margin-down:30px;">
+                        {% import 'basic/pagination.html' as pg %}
+                        {{ pg.my_paginate(pagination,'main.showMessage') }}
+                    </div>
+                    </div>
+                    </div>
+                {% else %}
+                    <div class="col-sm-6 col-sm-offset-3">
+                        <h2>Currently no message in this storage!</h2>
+                    </div>
+                    </div>
+                    </div>
+                {% endif %}
+
+{% endblock %}

@@ -1,0 +1,397 @@
+﻿{% extends "basic/base.html" %}
+{% block title %}{{ storage.location_name }}{% endblock %}
+{% block username %}{{ current_user }}{% endblock %}
+{% block content %}
+    <div class="wrapper wrapper-content">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <a href="{{ url_for('main.manageFoundItemByStorage', storage_id=storage.id) }}"
+                               style="color:inherit">
+                                <div class="ibox">
+                                    <div class="ibox-title">
+                                        <h5>Total Storage Found Items</h5>
+                                    </div>
+                                    <div class="ibox-content">
+                                        <h1 class="no-margins">{{ found_count }}</h1>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-lg-6">
+                            <a href="{{ url_for('main.manageSuccessItemByStorage', storage_id=storage.id) }}"
+                               style="color:inherit">
+                                <div class="ibox ">
+                                    <div class="ibox-title">
+                                        <h5>Total success return back</h5>
+                                    </div>
+                                    <div class="ibox-content">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <h1 class="no-margins">{{ success_count }}</h1>
+                                                <div class="font-bold text-navy">50% <i class="fa fa-level-up"></i>
+                                                    <small>increase</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="ibox">
+                                <div class="ibox-title">
+                                    <h5>Recent Uploaded items in {{ storage.location_name }}</h5>
+                                </div>
+                                <div class="col-lg-8"></div>
+                                <div class="ibox-content">
+                                    <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                                        <div class="carousel-inner">
+                                            {% if not items %}
+                                                <h1>Currently no item uploaded in this storage.</h1>
+                                            {% endif %}
+                                            {% if items[0] %}
+                                                <div class="carousel-item active"><img class="d-block w-100"
+                                                                                       src="{{ url_for('static', filename='uploads/' + items[0].pic) }}"
+                                                                                       alt="First slide"></div>
+                                            {% endif %}
+                                            {% if items[1] %}
+                                                <div class="carousel-item"><img class="d-block w-100"
+                                                                                src="{{ url_for('static', filename='uploads/' + items[1].pic) }}"
+                                                                                alt="Second slide">
+                                                </div>
+                                            {% endif %}
+                                            {% if items[2] %}
+                                                <div class="carousel-item"><img class="d-block w-100"
+                                                                                src="{{ url_for('static', filename='uploads/' + items[2].pic) }}"
+                                                                                alt="Third slide">
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                        <a class="carousel-control-prev" href="#carouselExampleControls" role="button"
+                                           data-slide="prev">
+                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span> <span
+                                                class="sr-only">Previous</span>
+                                        </a> <a class="carousel-control-next" href="#carouselExampleControls"
+                                                role="button"
+                                                data-slide="next"> <span class="carousel-control-next-icon"
+                                                                         aria-hidden="true"></span> <span
+                                            class="sr-only">Next</span> </a></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="ibox text-center">
+                                <div class="ibox-content">
+                                    <h1>{{ storage.location_name }}</h1>
+                                    <div class="m-b-sm">
+                                        <img alt="image" class="rounded-circle"
+                                             src="{{ url_for('static', filename=storage.pic) }}">
+                                    </div>
+
+                                    {% if current_user.storage_id == storage.id %}
+                                        <h4 class="font-bold">
+                                            You are managing this area
+                                        </h4>
+                                    {% else %}
+                                        <h4 class="font-bold">
+                                            You are visiting this area
+                                        </h4>
+                                    {% endif %}
+
+                                    {% if storage.available_time %}
+                                        <h4 class="font-bold">Available_time: {{ storage.available_time }}</h4>
+                                    {% endif %}
+                                    {% if storage.phone_number %}
+                                        <h4 class="font-bold">Tel: {{ storage.phone_number }}</h4>
+                                    {% endif %}
+                                    <hr>
+                                    {% if current_user.group_id == 1 %}
+                                        <div class="text-center">
+                                            <a class="btn btn-xs btn-white"
+                                               onclick="location.href='{{ url_for('main.modifyStorage', storage_id=storage.id) }}'">
+                                                modify </a>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            {% if current_user.group_id != 1 %}
+                                <form action="{{ url_for('main.showStorage', storage_id=storage.id) }}" method="POST">
+                                    <div class="ibox">
+                                        <div class="ibox-content">
+                                            {% for message in get_flashed_messages() %}
+                                                <div class="alert alert-danger alert-dismissable">
+                                                    <button aria-hidden="true" data-dismiss="alert" class="close"
+                                                            type="button">
+                                                        ×
+                                                    </button>
+                                                    {{ message }}
+                                                </div>
+                                            {% endfor %}
+
+                                            {% for field_name, field_errors in form.errors|dictsort if field_errors %}
+                                                {% for error in field_errors %}
+                                                    <div class="alert alert-danger alert-dismissible" role="alert">
+                                                        <button type="button" class="close" data-dismiss="alert"
+                                                                aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span></button>
+                                                        <strong>{{ form[field_name].label }}Error:</strong> {{ error }}
+                                                    </div>
+                                                {% endfor %}
+                                            {% endfor %}
+
+                                            {% if success_send %}
+                                                <div class="alert alert-success alert-dismissible" role="alert">
+                                                    <button type="button" class="close" data-dismiss="alert"
+                                                            aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span></button>
+                                                    <strong>{{ success_send }}</strong>
+                                                </div>
+                                            {% endif %}
+
+                                            <h3>Send message</h3>
+
+                                            <p class="small">
+                                                to <b>{{ storage.location_name }}
+                                            </b></p>
+
+                                            <div class="form-group">
+                                                <label>Title</label>
+                                                <input type="text" class="form-control"
+                                                       placeholder="The title you want to say.."
+                                                       name="title">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Content</label>
+                                                <textarea class="form-control"
+                                                          placeholder="The content you want to say.."
+                                                          rows="3"
+                                                          style="margin-top: 0px; margin-bottom: 0px; height: 108px;"
+                                                          name="content"></textarea>
+                                            </div>
+                                            <button class="btn btn-primary btn-block" type="submit" name="submit">Send
+                                            </button>
+
+                                </form>
+                                </div>
+                                </div>
+                            {% elif current_user.group_id == 1 %}
+                                <div class="ibox">
+                                    <div class="ibox-title"><span class="label label-warning float-right">New</span>
+                                        <h5>Message</h5>
+                                    </div>
+                                    {% if not messages %}
+                                        <div class="ibox-content">
+                                            <div class="row">
+                                                <div class="col-12" style="margin-bottom: -27px; margin-top: -6px;">
+                                                    <h1>Currently no message recieved</h1>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                    {% for message in messages %}
+                                        {% if message == messages[2] %}
+                                            {% break %}
+                                        {% endif %}
+                                        <div class="ibox-content">
+                                            <div class="row">
+                                                <div class="col-12" style="margin-bottom: -27px; margin-top: -6px;">
+                                                    <div style="overflow: auto;">
+                                                        <div style="float:left">
+                                                            <h4>{{ message.title }}</h4>
+                                                            <p>
+                                                                <small class="stats-label">{{ message.content }}</small>
+                                                            </p>
+                                                        </div>
+                                                        <img src="{{ url_for('static', filename=message.sender.icon) }}"
+                                                             style="height: 50px; width:50px; float:right"
+                                                             class="img-circle">
+                                                    </div>
+                                                    <div style="margin-top:10px;">
+                                                        <p style="float:left">
+                                                            <b>
+                                                                <small class="stats-label">
+                                                                    Sender: {{ message.sender.true_name }}</small>
+                                                            </b>
+                                                        </p>
+                                                        <p style="float:right">
+                                                            <b>
+                                                                <small class="stats-label">{{ message.timestamp }}</small>
+                                                            </b>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                    <div class="ibox-content" style="margin-bottom: -27px; padding-top: -20px;">
+                                        <button class="btn btn-primary btn-block m-t" style="margin-top:0px;"
+                                                onclick="location.href='{{ url_for('main.showMessage', storage_id=storage.id) }}'">
+                                            <i
+                                                    class="fa fa-arrow-down"></i> See more
+                                        </button>
+                                    </div>
+                                </div>
+                            {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12" style="margin-top: 20px;">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h5>All items in {{ storage.location_name }}</h5>
+                </div>
+                <div class="ibox-content">
+
+                    <table class="footable table table-stripped toggle-arrow-tiny footable-loaded default breakpoint"
+                           data-page-size="15">
+                        <thead>
+                        <tr>
+                            <th data-toggle="true" class="footable-visible footable-sortable footable-first-column">
+                                Item names<span class="footable-sort-indicator"></span></th>
+                            <th data-hide="all" class="footable-sortable">Category<span
+                                    class="footable-sort-indicator"></span></th>
+                            <th data-hide="phone" class="footable-visible footable-sortable">Lost/Found time<span
+                                    class="footable-sort-indicator"></span></th>
+                            <th data-hide="phone" class="footable-visible footable-sortable">Location<span
+                                    class="footable-sort-indicator"></span></th>
+                            <th data-hide="phone,tablet" class="footable-sortable footable-visible">Upload time<span
+                                    class="footable-sort-indicator"></span></th>
+                            <th data-hide="phone" class="footable-visible footable-sortable">Status<span
+                                    class="footable-sort-indicator"></span></th>
+                            <th class="text-right footable-visible footable-last-column" data-sort-ignore="true">
+                                Operation
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for item in items %}
+                            <tr class="footable-even" style="">
+                                <td class="footable-visible footable-first-column" id="item_name"
+                                    value="{{ item.item_id }}"><span class="footable-toggle"></span>
+                                    {{ item.item_name }}
+                                </td>
+                                <td class="footable-visible" id="item_id" style="display: none;"
+                                    value="{{ item.item_name }}">
+                                    {{ item.item_id }}
+                                </td>
+                                <input type="text" value="{{ item.item_name }}" id="{{ item.item_id }}"
+                                       style="display: none;">
+                                <td class="footable-visible">
+                                    {{ item.category }}
+                                </td>
+                                <td class="footable-visible">
+                                    {{ item.time }}
+                                </td>
+                                <td class="footable-visible" style="">
+                                    {{ item.location }}
+                                </td>
+                                <td class="footable-visible">
+                                    {{ item.timestamp }}
+                                </td>
+                                <td class="footable-visible">
+                                    {% if item.status == 'found' or item.status == 'lost' %}
+                                        <span class="label label-danger">{{ item.status }}</span>
+                                    {% endif %}
+                                    {% if item.status == 'success' %}
+                                        <span class="label label-success">{{ item.status }}</span>
+                                    {% endif %}
+                                </td>
+                                <td class="text-right footable-visible footable-last-column">
+                                    <div class="btn-group">
+                                        <a href="{{ url_for("item.itemDetail", item_id=item.id) }}"
+                                           style="color:inherit">
+                                            <button class="btn-white btn btn-xs">check</button>
+                                        </a>
+                                        {% if current_user.group_id == 1 %}
+                                        <a href="{{ url_for("item.modify", item_id=item.id) }}"
+                                           style="color:inherit">
+                                            <button class="btn-white btn btn-xs">edit</button>
+                                        </a>
+                                        <button class="btn-white btn btn-xs" data-toggle="modal"
+                                                data-target="#myModal{{ item.id }}" style="color:inherit">delete
+                                        </button>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                            </tr>
+                            <div class="modal fade" id="myModal{{ item.id }}" tabindex="-1" role="dialog"
+                                 aria-labelledby="myModalLabel" aria-hidden="true" style="margin-top:180px;">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title" id="myModalLabel">
+                                                Confirm Delete
+                                            </h4>
+                                            <button type="button" class="close" data-dismiss="modal"
+                                                    aria-hidden="true">×
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Are you sure to delete {{ item.item_name }}?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default"
+                                                    data-dismiss="modal">cancel
+                                            </button>
+                                            <button type="button" class="btn btn-primary" id="confirm"
+                                                    onclick="location.href='{{ url_for('item.delete', item_id=item.id) }}'">
+                                                confirm
+                                            </button>
+                                        </div>
+                                    </div><!-- /.modal-content -->
+                                </div><!-- /.modal-dialog -->
+                            </div><!-- /.modal -->
+                        {% endfor %}
+                        </tbody>
+                        <tfoot>
+                        <tr>
+
+                        </tr>
+                        </tfoot>
+                    </table>
+                                        {% import 'basic/pagination.html' as pg %}
+                                        {{ pg.my_paginate(pagination,'main.showStorage') }}
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+{% endblock %}
+{% block script %}
+    <script>
+        var doughnutData = {
+            labels: ["Lost items", "Found items", "success return"],
+            datasets: [{
+                data: [{{ lost_count }}, {{ found_count }}, {{ success_count }}],
+                backgroundColor: ["#a3e1d4", "#dedede", "#b5b8cf"]
+            }]
+        };
+
+
+        var doughnutOptions = {
+            responsive: true
+        };
+
+
+        var ctx4 = document.getElementById("doughnutChart").getContext("2d");
+        new Chart(ctx4, {type: 'doughnut', data: doughnutData, options: doughnutOptions});
+    </script>
+{% endblock %}

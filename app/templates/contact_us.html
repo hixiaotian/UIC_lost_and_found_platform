@@ -1,0 +1,102 @@
+{% extends "basic/base.html" %}
+{% block username %}{{ current_user.username }}{% endblock %}
+{% block title %}contact us{% endblock %}
+{% block content %}
+    <hr>
+    <div class="row wrapper border-bottom white-bg page-heading">
+
+        <div class="col-lg-12">
+            <h2>Contact Us!</h2>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url_for('main.userpage') }}">{{ current_user }}</a></li>
+                <li class="breadcrumb-item active"><strong>Contact Us!</strong></li>
+            </ol>
+        </div>
+        <div class="col-lg-12"></div>
+    </div>
+
+    <div id="container" class="gray-bg" style="width:100%">
+    <div class="wrapper wrapper-content animated fadeInRight container">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="ibox">
+                    <div class="ibox-content text-center">
+                        <h1>田展铭 Elliot</h1>
+                        <div class="m-b-sm">
+                            <img alt="image" class="rounded-circle" height="100px" width="100px"
+                                 src="{{ url_for('static', filename='img/contact/tzm.jpg') }}">
+                        </div>
+                        <h4 class="font-bold">Website Developer & Group Leader</h4>
+                        <hr>
+                        <h5><b>Email:</b> m730026102@mail.uic.edu.hk</h5>
+                        <h5><b>Tel:</b> 13172650285</h5>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="ibox">
+                    <div class="ibox-content text-center">
+                        <h1>卢思奇 Leon</h1>
+                        <div class="m-b-sm">
+                            <img alt="image" class="rounded-circle" height="100px" width="100px"
+                                 src="{{ url_for('static', filename='img/contact/lsq.jpg') }}">
+                        </div>
+                        <h4 class="font-bold">Website Developer</h4>
+                        <hr>
+                        <h5>email: m730026076@mail.uic.edu.hk</h5>
+                        <h5>Tel: 18124142036</h5>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="ibox">
+                    <div class="ibox-content text-center">
+                        <h1>葛泓萱 Jager</h1>
+                        <div class="m-b-sm">
+                            <img alt="image" class="rounded-circle" height="100px" width="100px"
+                                 src="{{ url_for('static', filename='img/contact/ghx.jpg') }}">
+                        </div>
+                        <h4 class="font-bold">Website Developer</h4>
+                        <hr>
+                        <h5>email: m730026024@mail.uic.edu.hk</h5>
+                        <h5>Tel: 13998542812</h5>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="ibox">
+                    <div class="ibox-content text-center">
+                        <h1>徐朗千 Jerry</h1>
+                        <div class="m-b-sm">
+                            <img alt="image" class="rounded-circle" height="100px" width="100px"
+                                 src="{{ url_for('static', filename='img/contact/xlq.jpg') }}">
+                        </div>
+                        <h4 class="font-bold">Website Developer</h4>
+                        <hr>
+                        <h5>email: m730026169@mail.uic.edu.hk</h5>
+                        <h5>Tel: 13620463358</h5>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="ibox">
+                    <div class="ibox-content text-center">
+                        <h1>杨浩然 Aaron</h1>
+                        <div class="m-b-sm">
+                            <img alt="image" class="rounded-circle" height="100px" width="100px"
+                                 src="{{ url_for('static', filename='img/contact/yhr.jpg') }}">
+                        </div>
+                        <h4 class="font-bold">Website Developer</h4>
+                        <hr>
+                        <h5>email: m730026132@mail.uic.edu.hk</h5>
+                        <h5>Tel: 13820990730</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

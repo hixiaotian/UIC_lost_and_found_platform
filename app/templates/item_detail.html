@@ -1,0 +1,161 @@
+{% extends "basic/base.html" %}
+{% block title %}Item Detail{% endblock %}
+{% block username %}{{ current_user }}{% endblock %}
+{% block content %}
+            <div class="row wrapper border-bottom white-bg page-heading">
+                <div class="col-lg-12">
+                    <h2>{{ item.item_name }}</h2>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"> <a href="{{ url_for('item.search') }}">Search</a> </li>
+                        <li class="breadcrumb-item active"> <strong>items details</strong> </li>
+                    </ol>
+                </div>
+            </div>
+            <div class="gray-bg" style="width: 100%;">
+                <div class="wrapper wrapper-content container animated fadeInRight" >
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="ibox product-detail">
+                                <div class="ibox-content">
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <div class="product-images">
+                                                <div>
+                                                    <img src="{{ url_for('static', filename='uploads/' + item.pic) }}" style="width:100%; height: auto;">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-7">
+                                            <h2 class="font-bold m-b-xs">{{ item.item_name }}</h2>
+                                            <h3>{{ item.category }}</h3>
+                                            <hr>
+                                            <h4 style="color: #1ab394;"><b>description</b></h4>
+											<dd>{{ item.description }}</dd>
+                                            {% if item.status == 'lost' or item.status == 'found' %}
+                                                <dl class="small m-t-md">
+                                                    <dt style="color: #1ab394;">{{ item.status }} location</dt>
+                                                    <dd>{{ item.location }}</dd>
+                                                    <dt style="color: #1ab394;">{{ item.status }} time</dt>
+                                                    <dd>{{ item.time }}</dd>
+                                                    <dt style="color: #1ab394;">uploader</dt>
+                                                    <dd>{{ uploader.true_name }}</dd>
+                                                    <dt style="color: #1ab394;">uploader's phone</dt>
+                                                    <dd>{{ uploader.phone_number }}</dd>
+                                                    {% if item.store_location_id %}
+                                                        <dt style="color: #1ab394;">Store location</dt>
+                                                        <dd>{{ item.store_location.location_name }}</dd>
+                                                    {% endif %}
+                                                </dl>
+                                            {% endif %}
+                                            {% if item.status == 'success' %}
+                                            <dl class="small m-t-md">
+                                                    <h4 style="color: #1ab394;">This item has been successfully returned back! </h4>
+                                                </dl>
+                                            <hr>
+                                            {% endif %}
+                                            <div>
+                                                {% if current_user.id == uploader.id or current_user.group_id == 1 %}
+                                                <div class="btn-group">
+                                                    <a href="{{ url_for('item.modify', item_id=item.id) }}">
+                                                        <button class="btn btn-primary btn-sm">Edit</button>
+                                                    </a>
+                                                        <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#myModal">delete</button>
+                                                </div><br><br>
+                                                    {% if item.status != 'success' %}
+                                                    <p>
+                                                        <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#myModal2">Confirm return back</button>
+                                                    </p>
+                                                    {% endif %}
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h2>Comment:</h2>
+                            {% for k in comment %}
+                            <div class="social-feed-box">
+                                <div class="social-avatar"> <a href="" class="float-left"> <img alt="image" src="{{ url_for('static', filename=k.uploader.icon) }}"> </a>
+                                    <div class="media-body"> <a href="#"> {{ k.uploader.true_name }} </a> <small class="text-muted">{{ k.timestamp }}</small> </div>
+                                </div>
+                                <div class="social-body">
+                                    <p> {{ k.content }} </p>
+                                </div>
+                            </div>
+                            {% endfor %}
+                            {% if comment %}
+                            {% import 'basic/pagination.html' as pg %}
+                            {{ pg.my_paginate(pagination,'main.itemDetail') }}
+                            {% endif %}
+                        <hr>
+                            <form action="{{ url_for('item.itemDetail', item_id=item.id) }}" method="post" role="form">
+                            <div class="social-feed-box">
+                                <div class="form-group row social-body">
+                                <label class="col-sm-2 col-form-label">Input your comment</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="comment">
+                                    <button class="btn btn-lg btn-primary" type="submit" name="submit" id="submit" style="float:right; margin-top:20px; margin-down:-10px;"> comment </button>
+                                </div>
+                            </div>
+                            </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="margin-top:180px;">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="myModalLabel">
+                                Confirm Delete
+                            </h4>
+                            <button type="button" class="close" data-dismiss="modal"
+                                    aria-hidden="true">×
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            Are you sure to delete ?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default"
+                                    data-dismiss="modal">cancel
+                            </button>
+                            <button type="button" class="btn btn-primary" id="confirm" onclick="location.href='{{ url_for('item.delete', item_id=item.id) }}'">
+                                confirm
+                            </button>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->
+                <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="margin-top:180px;">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title" id="myModalLabel">
+                                    Confirm Return back
+                                </h4>
+                                <button type="button" class="close" data-dismiss="modal"
+                                        aria-hidden="true">×
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                Are you sure this item is returned back ?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default"
+                                        data-dismiss="modal">cancel
+                                </button>
+                                <button type="button" class="btn btn-primary" id="confirm" onclick="location.href='{{ url_for('item.ChangeStatus', item_id=item.id) }}'">
+                                    confirm
+                                </button>
+                            </div>
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal-dialog -->
+                    </div><!-- /.modal -->
+                </div>
+{% endblock %}

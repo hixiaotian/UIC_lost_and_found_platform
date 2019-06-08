@@ -1,0 +1,133 @@
+{% extends "basic/base.html" %}
+{% block username %}{{ current_user }}{% endblock %}
+{% block title %}Search{% endblock %}
+{% block content %}
+        <div id="container" class="gray-bg" style="width:100%">
+            <div class="container align-items-center">
+                <br>
+                <div class="text-center">
+                    <h2>Search</h2>
+                    <hr>
+                </div>
+                <div class="wrapper wrapper-content animated fadeInRight">
+                    <div class="row">
+
+{#                        {% for message in get_flashed_messages() %}#}
+{#                            <div class="alert alert-danger alert-dismissable">#}
+{#                            <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>#}
+{#                            {{ message }}#}
+{#                            </div>#}
+{#                        {% endfor %}#}
+{##}
+{#                        {% for field_name, field_errors in form.errors|dictsort if field_errors %}#}
+{#                            {% for error in field_errors %}#}
+{#                                <div class="alert alert-danger alert-dismissible" role="alert">#}
+{#                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>#}
+{#                                    <strong>{{ form[field_name].label }}错误：</strong> {{ error }}#}
+{#                                </div>#}
+{#                            {% endfor %}#}
+{#                        {% endfor %}#}
+
+                        <div class="col-lg-12">
+                            <div class="ibox">
+                                <div class="ibox-content">
+                                    <div class="search-form">
+                                        <form action="{{ url_for("item.search") }}" method="get">
+                                            <div class="input-group">
+                                                <input type="text" placeholder="input the name of item.." name="search" class="form-control input-lg" id="search">
+                                                <div class="input-group-btn">
+                                                    <button class="btn btn-lg btn-primary" type="submit" id="submit"> Search </button>
+                                                </div>
+                                            </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container">
+                        <h3 class="font-bold">Category：</h3>
+                        <p>
+                            <button type="button" class="btn btn-outline btn-primary" id="electronic">Electronic products</button>
+                            <button type="button" class="btn btn-outline btn-success" id="living">Living things</button>
+                            <button type="button" class="btn btn-outline btn-danger" id="valuables">Valuables</button>
+                            <button type="button" class="btn btn-outline btn-info" id="card">Card</button>
+                            <button type="button" class="btn btn-outline btn-info" id="book">Book</button>
+                            <button type="button" class="btn btn-outline btn-warning" id="school">School supplies</button>
+                            <button type="button" class="btn btn-outline btn-success" id="others">others</button>
+                        </p>
+                    </div>
+                    <div style="display: none">
+                        <input type="text" value="" id="category" name="category">
+                    </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+            <div class="wrapper wrapper-content animated fadeInRight container">
+                <div class="row">
+                    {% for item in items %}
+                    <div class="col-md-3">
+                        <div class="ibox">
+                            <div class="ibox-content product-box">
+                                <div><img src="{{ url_for('static', filename='uploads/' + item.pic) }}" style="width:100%; height: auto;"></div>
+                                <div class="product-desc">  <small class="text-muted">{{ item.category.name }}</small> <a href="#" class="product-name">{{ item.item_name }}</a>
+                                    <div class="small m-t-xs">{{ item.description }}</div>
+                                    <div class="m-t text-righ"> <a href="{{ url_for('item.itemDetail', item_id=item.id) }}" class="btn btn-xs btn-outline btn-primary">more details <i class="fa fa-long-arrow-right"></i> </a> </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div style="margin-left: 26vw; margin-top: 20px;">
+                    {%import 'basic/pagination.html' as pg%}
+                    {{pg.my_paginate(pagination,'item.search')}}
+                </div>
+
+{#                <div align="center">#}
+{#                    <div class="btn-group">#}
+{#                        <button type="button" class="btn btn-white"><i class="fa fa-chevron-left"></i></button>#}
+{#                        <button class="btn btn-white active">1</button>#}
+{#                        <button class="btn btn-white">2</button>#}
+{#                        <button class="btn btn-white">3</button>#}
+{#                        <button class="btn btn-white">4</button>#}
+{#                        <button type="button" class="btn btn-white"><i class="fa fa-chevron-right"></i> </button>#}
+{#                    </div>#}
+{#                </div>#}
+            </div>
+    {% endblock %}
+
+{% block script %}
+    <script>
+    $("#electronic").click(function () {
+        $("#category").val("electronic");
+        $("#submit").click();
+    });
+    $("#living").click(function () {
+        $("#category").val("living_thing");
+        $("#submit").click();
+    });
+    $("#valuables").click(function () {
+        $("#category").val("valuables");
+        $("#submit").click();
+    });
+    $("#card").click(function () {
+        $("#category").val("card");
+        $("#submit").click();
+    });
+    $("#school").click(function () {
+        $("#category").val("school_supplies");
+        $("#submit").click();
+    });
+    $("#book").click(function () {
+        $("#category").val("book");
+        $("#submit").click();
+    });
+    $("#others").click(function () {
+        $("#category").val("others");
+        $("#submit").click();
+    });
+    </script>
+{% endblock %}

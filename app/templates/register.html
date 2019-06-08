@@ -1,0 +1,97 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Register Page | UIC L&amp;F</title>
+    <link href="{{ url_for('static', filename='img/favicon.png') }}" rel="icon">
+    {% include "basic/css.html" %}
+
+    <style>
+		body{
+			margin-top: 50px;
+		}
+	</style>
+</head>
+
+
+<body class="gray-bg">
+
+    <div class="middle-box text-center loginscreen   animated fadeInDown">
+        <div>
+            <div>
+                <img src="{{ url_for('static',filename='img/logo_black.png') }}" style="width: 200px"/>
+            </div>
+            <br>
+            <h3>Register Your Account on UIC L&amp;F</h3>
+            <p>After register, you can enjoy more functions!</p>
+            <form class="m-t" role="form" action="{{ url_for('user.register') }}" method="post">
+
+                {% for message in get_flashed_messages() %}
+                    <div class="alert alert-danger alert-dismissable">
+                    <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                    {{ message }}
+                    </div>
+                {% endfor %}
+
+                {% for field_name, field_errors in form.errors|dictsort if field_errors %}
+                    {% for error in field_errors %}
+                        <div class="alert alert-danger alert-dismissible" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <strong>{{ form[field_name].label }}Error:</strong> {{ error }}
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+
+
+				<div class="form-group">
+                    <input type="text" class="form-control" placeholder="Your user name" name="username" required="">
+                </div>
+                <div class="form-group">
+                    <input type="number" class="form-control" placeholder="student id" name="student_id" required="">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="true name" name="true_name" required="">
+                </div>
+                <div class="form-group">
+                    <input type="number" class="form-control" placeholder="phone number" name="phone_number" required="">
+                </div>
+				<div class="form-group">
+                    <input type="email" class="form-control" placeholder="email address" name="email" required="">
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" placeholder="password" name="password" required="">
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" placeholder="confirm password" name="confirm_new_password" required="">
+                </div>
+{#                <div class="form-group">#}
+{#                        <div class="checkbox i-checks"><label> <input type="checkbox"><i></i> Agree Policy? </label></div>#}
+{#                </div>#}
+                <button type="submit" class="btn btn-primary block full-width m-b">Register</button>
+
+                <p class="text-muted text-center"><small>Alreadly have an account?</small></p>
+                <a class="btn btn-sm btn-white btn-block" href="{{ url_for('user.login') }}">Login</a>
+
+            </form>
+            <p class="m-t"> <small>Copyright</strong> UIC SDWII coursework &copy; 2018-2019</small> </p>
+        </div>
+    </div>
+    <script src="{{ url_for('static',filename='js/jquery-3.1.1.min.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/popper.min.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/bootstrap.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/plugins/iCheck/icheck.min.js') }}"></script>
+    <script>
+        $(document).ready(function(){
+            $('.i-checks').iCheck({
+                checkboxClass: 'icheckbox_square-green',
+                radioClass: 'iradio_square-green',
+            });
+        });
+    </script>
+</body>
+
+</html>

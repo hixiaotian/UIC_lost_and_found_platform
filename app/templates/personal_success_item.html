@@ -1,0 +1,46 @@
+{% extends "basic/base.html" %}
+{% block username %}{{ current_user.username }}{% endblock %}
+{% block title %}Success returned{% endblock %}
+{% block content %}
+            <hr>
+            <div class="row wrapper border-bottom white-bg page-heading">
+                <div class="col-lg-12">
+                    <h2>Successful returned items</h2>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"> <a href="{{ url_for('main.userpage') }}">{{ current_user.username }}</a> </li>
+                        <li class="breadcrumb-item active"> <strong>Successful returned items</strong> </li>
+                    </ol>
+                </div>
+                <div class="col-lg-2"> </div>
+            </div>
+            <div id="container" class="gray-bg" style="width:100%">
+                <div class="wrapper wrapper-content animated fadeInRight container">
+                    <div class="row">
+                    {% if items %}
+                        {% for item in items %}
+                        <div class="col-md-3">
+                            <div class="ibox">
+                                <div class="ibox-content product-box">
+                                    <div><img src="{{ url_for('static', filename='uploads/' + item.pic) }}" style="width:100%; height: auto;"></div>
+                                    <div class="product-desc"> <small class="text-muted">{{ item.category }}</small> <a href="#" class="product-name"> {{ item.item_name }}</a>
+                                        <div class="small m-t-xs" style="text-overflow:ellipsis;white-space: nowrap;overflow: hidden;">{{ item.description }}</div>
+                                        <div class="m-t text-righ"> <a href="{{ url_for('item.itemDetail', item_id=item.id) }}" class="btn btn-xs btn-outline btn-primary">more details <i class="fa fa-long-arrow-right"></i> </a> </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <div style="margin-left: 26vw; margin-top: 20px;">
+                    {%import 'basic/pagination.html' as pg%}
+                    {{pg.my_paginate(pagination,'user.lost_item')}}
+                    </div>
+                    {% else %}
+                            <div class="col-sm-6 col-sm-offset-3">
+                                <h2>You currently do not have any items successfully returned.</h2>
+                            </div>
+                    {% endif %}
+                </div>
+            </div>
+        {% endblock %}

@@ -1,0 +1,70 @@
+{% extends "basic/base.html" %}
+{% block username %}{{ current_user.username }}{% endblock %}
+{% block title %}comment{% endblock %}
+{% block content %}
+    <hr>
+    <div class="row wrapper border-bottom white-bg page-heading">
+
+        <div class="col-lg-12">
+            <h2>All Comment on my uploaded items</h2>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url_for('main.userpage') }}">{{ current_user }}</a></li>
+                <li class="breadcrumb-item active"><strong>All Comment on my uploaded items</strong></li>
+            </ol>
+        </div>
+        <div class="col-lg-12"></div>
+    </div>
+
+    <div id="container" class="gray-bg" style="width:100%">
+        <div class="wrapper wrapper-content animated fadeInRight container">
+            <div class="row">
+                {% if comments %}
+                    {% for comment in comments %}
+                        <div class="col-lg-6">
+                            <div class="ibox ">
+                                <div class="ibox-title">
+                                    <h5>From: {{ comment.uploader }}</h5>
+                                    <div class="ibox-tools">
+                                        <a class="collapse-link">
+                                            <i class="fa fa-chevron-up"></i>
+                                        </a>
+                                        <a class="close-link">
+                                            <i class="fa fa-times"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <a href="{{ url_for('item.itemDetail', item_id=comment.comment_item) }}"
+                                   style="color:inherit">
+                                    <div class="ibox-content">
+                                        <div style="overflow: auto;">
+                                            <p style="float:left">
+                                                {{ comment.content }}
+                                            </p>
+                                            <img src="{{ url_for('static', filename=comment.uploader.icon) }}"
+                                                 style="height: 70px; width:70px; float:right" class="img-circle">
+                                        </div>
+                                        <hr>
+                                        <div style="margin-top:-10px; margin-down:10px; padding:10px;">
+                                            <p style="float:left">
+                                                Upload time: {{ comment.timestamp }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    <div style="margin-left: 22vw; margin-top: 30px; margin-down:30px;">
+                        {% import 'basic/pagination.html' as pg %}
+                        {{ pg.my_paginate(pagination,'main.showComment') }}
+                    </div>
+                    </div>
+                    </div>
+                {% else %}
+                    <div class="col-sm-6 col-sm-offset-3">
+                        <h2>Currently no comment on your upload items!</h2>
+                    </div>
+                    </div>
+                    </div>
+                {% endif %}
+{% endblock %}

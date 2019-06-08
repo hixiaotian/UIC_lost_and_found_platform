@@ -1,0 +1,182 @@
+{% extends "basic/base.html" %}
+{% block username %}{{ current_user }}{% endblock %}
+{% block title %}Admin Page{% endblock %}
+{% block content %}
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-lg-10">
+            <h2>Whole table for {{ message }}items</h2>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="index.html">Homepage</a>
+                </li>
+
+                <li class="breadcrumb-item active">
+                    <strong>Whole table for {{ message }}items</strong>
+                </li>
+            </ol>
+        </div>
+        <div class="col-lg-2">
+
+        </div>
+    </div>
+    <div class="wrapper wrapper-content animated fadeInRight ecommerce">
+
+        <form action="{{ url_for('main.manageFoundItemByStorage', storage_id=storage.id) }}" method="GET">
+            <div class="ibox-content m-b-sm border-bottom">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-form-label" for="product_name">Item names</label>
+                            <input type="text" name="item_name" value="" placeholder="Item names" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-form-label" for="price">uploader</label>
+                            <input type="text" name="uploader" value="" placeholder="Jerry" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-form-label" for="price">Lost or Found Location</label>
+                            <input type="text" name="location" value="" placeholder="T4" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <p>
+                            <button type="submit" name="submit" class="btn btn-w-m btn-primary">Search</button>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ibox">
+                        <div class="ibox-content">
+
+                            <table class="footable table table-stripped toggle-arrow-tiny footable-loaded default breakpoint"
+                                   data-page-size="15">
+                                <thead>
+                                <tr>
+
+                                    <th data-toggle="true"
+                                        class="footable-visible footable-sortable footable-first-column">
+                                        Item names<span class="footable-sort-indicator"></span></th>
+                                    <th data-hide="phone" class="footable-visible footable-sortable">uploader<span
+                                            class="footable-sort-indicator"></span></th>
+                                    <th data-hide="all" class="footable-sortable">category<span
+                                            class="footable-sort-indicator"></span></th>
+                                    <th data-hide="phone" class="footable-visible footable-sortable">Store Location<span
+                                            class="footable-sort-indicator"></span></th>
+                                    <th data-hide="phone,tablet" class="footable-sortable footable-visible" style="">
+                                        Lost or
+                                        Found time<span class="footable-sort-indicator"></span></th>
+                                    <th data-hide="phone,tablet" class="footable-sortable footable-visible" style="">
+                                        Lost or
+                                        Found location<span class="footable-sort-indicator"></span></th>
+                                    <th data-hide="phone" class="footable-visible footable-sortable">Status<span
+                                            class="footable-sort-indicator"></span></th>
+                                    <th class="text-right footable-visible footable-last-column"
+                                        data-sort-ignore="true">
+                                        Operation
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for item in items %}
+                                    <tr class="footable-even" style="">
+                                        <td class="footable-visible footable-first-column"><span
+                                                class="footable-toggle"></span>
+                                            {{ item.item_name }}
+                                        </td>
+                                        <td class="footable-visible">
+                                            {{ item.uploader.username }}
+                                        </td>
+                                        <td class="footable-visible">
+                                            {{ item.category }}
+                                        </td>
+                                        <td class="footable-visible" style="">
+                                            {{ item.store_location.location_name }}
+                                        </td>
+                                        <td class="footable-visible" style="">
+                                            {{ item.time }}
+                                        </td>
+                                        <td class="footable-visible" style="">
+                                            {{ item.location }}
+                                        </td>
+                                        <td class="footable-visible">
+                                            {% if item.status == 'lost' %}
+                                                <span class="label label-danger" style="margin-top: 5px;">lost</span>
+                                            {% endif %}
+                                            {% if item.status == 'found' %}
+                                                <span class="label label-danger" style="margin-top: 5px;">found</span>
+                                            {% endif %}
+                                            {% if item.status == 'success' %}
+                                                <span class="label label-primary" style="margin-top: 5px;">return</span>
+                                            {% endif %}
+                                        </td>
+                                        <td class="text-right footable-visible footable-last-column">
+                                            <div class="btn-group">
+                                                <button class="btn-primary btn btn-xs"
+                                                        onclick="location.href='{{ url_for('item.itemDetail', item_id=item.id) }}'">
+                                                    check
+                                                </button>
+                                                <button class="btn-warning btn btn-xs"
+                                                        onclick="location.href='{{ url_for('item.modify', item_id=item.id) }}'">
+                                                    edit
+                                                </button>
+                                                <button class="btn-danger btn btn-sx" data-toggle="modal"
+                                                        data-target="#myModal{{ item.id }}">delete
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <div class="modal fade" id="myModal{{ item.id }}" tabindex="-1" role="dialog"
+                                         aria-labelledby="myModalLabel" aria-hidden="true" style="margin-top:180px;">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title" id="myModalLabel">
+                                                        Confirm Delete
+                                                    </h4>
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                            aria-hidden="true">×
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    Are you sure to delete ?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-default"
+                                                            data-dismiss="modal">cancel
+                                                    </button>
+                                                    <button type="button" class="btn btn-primary" id="confirm"
+                                                            onclick="location.href='{{ url_for('item.delete', item_id=item.id) }}'">
+                                                        confirm
+                                                    </button>
+                                                </div>
+                                            </div><!-- /.modal-content -->
+                                        </div><!-- /.modal-dialog -->
+                                    </div><!-- /.modal -->
+                                {% endfor %}
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <td colspan="6" class="footable-visible"
+                                        style="padding-top: 20px; padding-down: -20px;">
+                                        {% import 'basic/pagination.html' as pg %}
+                                        {{ pg.my_paginate(pagination,'main.manageFoundItemByStorage') }}
+                                    </td>
+                                </tr>
+                                </tfoot>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+{% endblock %}

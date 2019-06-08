@@ -1,0 +1,200 @@
+{% extends "basic/base.html" %}
+
+{% block username %}{{ current_user }}{% endblock %}
+{% block title %}Modify profile{% endblock %}
+{% block content %}
+        <div class="gray-bg" style="width: 100%">
+            <div class="container align-items-center">
+                <div class="container">
+                    <div class="ibox-content" style="margin:50px 0;">
+                        <div class="text-center">
+                            <h2>Modify items</h2>
+                            <hr>
+                        </div>
+                        <form id="upload_form" method="post" role="form" action="{{ url_for('item.modify', item_id=item.id) }}">
+                            <div id="form_error"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Item names</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="item_name" value="{{ item.item_name }}">
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group row">
+								<label class="col-sm-2 col-form-label">Lost or Found<br></label>
+                                <div class="col-sm-10 col-form-label">
+                                    {% if item.status == 'lost' %}
+                                    <div>
+                                        <label>
+                                            <input type="radio" checked="" value="lost" id="optionsRadios1" name="status">
+                                            I lost this item </label>
+                                    </div>
+                                    <div>
+                                        <label>
+                                            <input type="radio" value="found" id="optionsRadios2" name="status">
+                                            I found this item </label>
+                                    </div>
+                                    {% endif %}
+                                    {% if item.status == 'found' %}
+                                    <div>
+                                        <label>
+                                            <input type="radio" value="lost" id="optionsRadios1" name="status">
+                                            I lost this item </label>
+                                    </div>
+                                    <div>
+                                        <label>
+                                            <input type="radio" value="found" id="optionsRadios2" name="status" checked="">
+                                            I found this item </label>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+							<div class="hr-line-dashed"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Lost or Found Location</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="location" value="{{ item.location }}">
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Lost or Found time</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="time" id="time" value="{{ item.time }}">
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">description</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="description" value="{{ item.description }}">
+                                    <span class="form-text m-b-none">You can display instructions, help, descriptions, and more</span> </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Category</label>
+                                <div class="col-sm-10">
+                                    <div>
+                                        <button type="button" class="btn btn-outline btn-primary" id="electronic">Electronic products</button>
+                                        <button type="button" class="btn btn-outline btn-success" id="living">Living things</button>
+                                        <button type="button" class="btn btn-outline btn-danger" id="valuables">Valuables</button>
+                                        <button type="button" class="btn btn-outline btn-info" id="card">Card</button>
+                                        <button type="button" class="btn btn-outline btn-info" id="book">Book</button>
+                                        <button type="button" class="btn btn-outline btn-warning" id="school">School supplies</button>
+                                        <button type="button" class="btn btn-outline btn-success" id="others">others</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="display: none">
+                                <input type="text" value="{{ item.category }}" id="category" name="category">
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Image</label>
+                                <div class="col-sm-10">
+                                    <div class="custom-file">
+                                        <input id="logo" type="file" class="custom-file-input" name="pic">
+                                        <label for="logo" class="custom-file-label">Choose image...</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Did the item have Clear identify information <br>
+                                    <small class="text-navy">If yes, we will automatically match database</small></label>
+                                <div class="col-sm-10">
+                                    <div>
+                                        <label>
+                                            <input type="radio" value="option1" name="optionsRadios" id="show">
+                                            Yes </label>
+                                    </div>
+                                    <div>
+                                        <label>
+                                            <input type="radio" value="option2" name="optionsRadios" id="hide">
+                                            No </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="content">
+                                <div class="hr-line-dashed"></div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">Write down the <b>name</b> on the item (if no, write nothing)</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="item_of_student_name">
+                                </div>
+                                    <label class="col-sm-2 col-form-label">Write down the <b>student</b> id on the item (if no, write nothing)</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="item_of_student_name">
+                                </div>
+                            </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group row">
+                                <div class="col-sm-4 col-sm-offset-2">
+                                    <button class="btn btn-white btn-sm" onclick="location.href='{{ url_for('main.userpage') }}'">cancel</button>
+                                    <button class="btn btn-primary btn-sm" type="button" onclick='submit_form()'>upload</button>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+		</div>
+{% endblock %}
+{% block script %}
+    <script>
+    $("#content").hide();
+    $("#show").click(function(){
+        $("#content").show();
+    });
+    $("#hide").click(function(){
+        $("#content").hide();
+    });
+
+    $("#electronic").click(function () {
+        $("#category").val("electronic");
+    });
+    $("#living").click(function () {
+        $("#category").val("living_thing");
+    });
+    $("#valuables").click(function () {
+        $("#category").val("valuables");
+    });
+    $("#card").click(function () {
+        $("#category").val("card");
+    });
+    $("#school").click(function () {
+        $("#category").val("school_supplies");
+    });
+    $("#book").click(function () {
+        $("#category").val("book");
+    });
+    $("#others").click(function () {
+        $("#category").val("others");
+    });
+
+    $("#time").onfocus(function () {
+        this.type = 'date';
+        this.focus();
+    });
+
+    function submit_form(){
+        var formData = new FormData(document.querySelector("form"));
+        $.ajax({
+            url: "{{ url_for('item.upload_form') }}",
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success:function(data){
+                if (data == 'success')
+                    window.location.href = "{{ url_for('main.userpage') }}";
+                else {
+                    $('#form_error').html(data);
+                }
+            }
+        });
+    }
+    </script>
+{% endblock %}

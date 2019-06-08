@@ -1,0 +1,80 @@
+{% extends "basic/base.html" %}
+{% block username %}{{ current_user }}{% endblock %}
+{% block title %}Storage{% endblock %}
+{% block content %}
+        <div class="gray-bg" style="width: 100%">
+            <div class="container align-items-center">
+                <div class="container">
+                    <div class="ibox-content" style="margin:50px 0;">
+                        <div class="text-center">
+                            <h2>Charging Storage selection</h2>
+                            <hr>
+                        </div>
+                        <form id="upload_form" method="post" role="form" action="{{ url_for('user.changeStorage') }}">
+
+                            {% for message in get_flashed_messages() %}
+                                <div class="alert alert-danger alert-dismissable">
+                                <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                                {{ message }}
+                                </div>
+                            {% endfor %}
+
+                            {% for field_name, field_errors in form.errors|dictsort if field_errors %}
+                                {% for error in field_errors %}
+                                    <div class="alert alert-danger alert-dismissible" role="alert">
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        <strong>{{ form[field_name].label }} Error:</strong> {{ error }}
+                                    </div>
+                                {% endfor %}
+                            {% endfor %}
+
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">change {{ current_user.username }}'s charging storage to?<br></label>
+                                <div class="col-sm-10 col-form-label">
+                                    <div>
+                                        <label>
+                                            <input type="radio" value="T29 Storage" name="choice">
+                                            T29 Storage </label>
+                                    </div>
+                                    <div>
+                                        <label>
+                                            <input type="radio" value="T4 Storage" name="choice">
+                                            T4 Storage </label>
+                                    </div>
+                                    <div>
+                                        <label>
+                                            <input type="radio" value="T5 Storage" name="choice">
+                                            T5 Storage </label>
+                                    </div>
+                                    <div>
+                                        <label>
+                                            <input type="radio" value="T6 Storage" name="choice">
+                                            T6 Storage </label>
+                                    </div>
+                                    <div>
+                                        <label>
+                                            <input type="radio" value="T7 Storage" name="choice">
+                                            T7 Storage </label>
+                                    </div>
+                                    <div>
+                                        <label>
+                                            <input type="radio" value="T8 Storage" name="choice">
+                                            T8 Storage </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group row">
+                                <div class="col-sm-4 col-sm-offset-2">
+                                    <button class="btn btn-white btn-sm" type="button" onclick="location.href='{{ url_for('main.userpage') }}'">cancel</button>
+                                    <button class="btn btn-primary btn-sm" type="submit" onclick="location.href='{{ url_for('user.changeStorage') }}'">confirm</button>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+		</div>
+{% endblock %}

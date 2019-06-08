@@ -1,0 +1,210 @@
+{% extends "basic/base.html" %}
+{% block username %}{{ current_user }}{% endblock %}
+{% block title %}Upload{% endblock %}
+{% block content %}
+    <div class="gray-bg" style="width: 100%">
+        <div class="container align-items-center">
+            <div class="container">
+                <div class="ibox-content" style="margin:50px 0;">
+                    <div class="text-center">
+                        <h2>Upload items</h2>
+                        <hr>
+                    </div>
+                    <form id="upload_form" method="post" role="form" action="{{ url_for('item.upload_form') }}">
+
+                        <div id="form_error"></div>
+
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Item names</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="item_name">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Lost or Found<br></label>
+                            <div class="col-sm-10 col-form-label">
+                                <div>
+                                    <label>
+                                        <input type="radio" checked="" value="lost" id="optionsRadios1" name="status">
+                                        I lost this item </label>
+                                </div>
+                                <div>
+                                    <label>
+                                        <input type="radio" value="found" id="optionsRadios2" name="status">
+                                        I found this item </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Lost or Found Location</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="location">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Lost or Found time</label>
+                            <div class="col-sm-10">
+                                <input type="date" class="form-control" name="time">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">description</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="description">
+                                <span class="form-text m-b-none">You can display descriptions, color, size and more</span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Category</label>
+                            <div class="col-sm-10">
+                                <div>
+                                    <button type="button" class="btn btn-outline btn-primary" id="electronic">Electronic
+                                        products
+                                    </button>
+                                    <button type="button" class="btn btn-outline btn-success" id="living">Living
+                                        things
+                                    </button>
+                                    <button type="button" class="btn btn-outline btn-danger" id="valuables">Valuables
+                                    </button>
+                                    <button type="button" class="btn btn-outline btn-info" id="card">Card</button>
+                                    <button type="button" class="btn btn-outline btn-info" id="book">Book</button>
+                                    <button type="button" class="btn btn-outline btn-warning" id="school">School
+                                        supplies
+                                    </button>
+                                    <button type="button" class="btn btn-outline btn-success" id="others">others
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="display: none">
+                            <input type="text" value="" id="category" name="category">
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Image</label>
+                            <div class="col-sm-10">
+                                <div class="custom-file">
+                                    <input id="logo" type="file" class="custom-file-input" name="pic">
+                                    <label for="logo" class="custom-file-label">Choose image...</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div id="store">
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Did the item have Store into the UIC L&F storage?
+                                <br>
+                                <small class="text-navy">If yes, please select YES</small>
+                            </label>
+                            <div class="col-sm-10">
+                                <div>
+                                    <label>
+                                        <input type="radio" value="option1" name="optionsRadios" id="show">
+                                        Yes </label>
+                                </div>
+                                <div>
+                                    <label>
+                                        <input type="radio" value="option2" name="optionsRadios" id="hide">
+                                        No </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="content">
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Select the <b>storage name</b></label>
+                                    <div class="col-sm-10">
+                                        <select class="form-control m-b" name="store_location">
+                                            <option>No selection</option>
+                                            <option>T29 Storage</option>
+                                            <option>T4 Storage</option>
+                                            <option>T5 Storage</option>
+                                            <option>T6 Storage</option>
+                                            <option>T7 Storage</option>
+                                            <option>T8 Storage</option>
+                                        </select>
+                                    </div>
+                            </div>
+                        </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group row">
+                                <div class="col-sm-4 col-sm-offset-2">
+                                    <button class="btn btn-white btn-sm" type="button"
+                                            onclick="location.href='{{ url_for('main.userpage') }}'">cancel
+                                    </button>
+                                    <button class="btn btn-primary btn-sm" type="button" onclick='submit_form()'>
+                                        upload
+                                    </button>
+                                </div>
+                            </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block script %}
+    <script>
+        $("#store").hide();
+        $("#content").hide();
+        $("#show").click(function () {
+            $("#content").show();
+        });
+        $("#hide").click(function () {
+            $("#content").hide();
+        });
+        $("#optionsRadios1").click(function () {
+            $("#store").hide();
+        });
+        $("#optionsRadios2").click(function () {
+            $("#store").show();
+        });
+
+        $("#electronic").click(function () {
+            $("#category").val("electronic");
+        });
+        $("#living").click(function () {
+            $("#category").val("living_thing");
+        });
+        $("#valuables").click(function () {
+            $("#category").val("valuables");
+        });
+        $("#card").click(function () {
+            $("#category").val("card");
+        });
+        $("#school").click(function () {
+            $("#category").val("school_supplies");
+        });
+        $("#book").click(function () {
+            $("#category").val("book");
+        });
+        $("#others").click(function () {
+            $("#category").val("others");
+        });
+
+        function submit_form() {
+            var formData = new FormData(document.querySelector("form"));
+            $.ajax({
+                url: "{{ url_for('item.upload_form') }}",
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    if (data == 'success')
+                        window.location.href = "{{ url_for('main.userpage') }}";
+                    else {
+                        $('#form_error').html(data);
+                    }
+                }
+            });
+        }
+    </script>
+{% endblock %}
